@@ -1,9 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // ✅ Import navigate
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
 import { Heart, User, Users, Stethoscope } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -17,6 +17,7 @@ const LoginForm = ({ onLogin }: LoginFormProps) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate(); // ✅ Create navigate instance
 
   const roles = [
     { id: 'patient', label: 'Patient', icon: User, color: 'bg-blue-500' },
@@ -34,9 +35,8 @@ const LoginForm = ({ onLogin }: LoginFormProps) => {
     e.preventDefault();
     setLoading(true);
 
-    // Demo authentication logic
     const demoUser = demoUsers[selectedRole];
-    
+
     if (email === demoUser.email && password === demoUser.password) {
       setTimeout(() => {
         onLogin({
@@ -48,6 +48,10 @@ const LoginForm = ({ onLogin }: LoginFormProps) => {
           title: "Login Successful",
           description: `Welcome to AuroCare, ${demoUser.name}!`,
         });
+
+        // ✅ Always redirect to patient page
+        navigate('/patient');
+
         setLoading(false);
       }, 1000);
     } else {
